@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Survei Kepuasan · Klinik Gayatri</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --brand:#0ea394;
+    --brand-2:#0b7d72;
+    --brand-3:#075e56;
+    --ink:#0f2e2a;
+    --muted:#5f7d79;
+    --line:#e4efec;
+    --field:#f6fbfa;
+    --det:#ef5b45;
+    --pas:#f5a623;
+    --pro:#16b98a;
+    --radius:20px;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:'Plus Jakarta Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+    color:var(--ink);
+    min-height:100dvh;
+    display:flex;align-items:center;justify-content:center;
+    padding:20px;
+    background:
+      radial-gradient(70% 55% at 8% 4%, #d3f2ea 0%, rgba(211,242,234,0) 60%),
+      radial-gradient(65% 55% at 100% 0%, #cfeaf6 0%, rgba(207,234,246,0) 55%),
+      radial-gradient(80% 70% at 50% 110%, #e6f7f2 0%, rgba(230,247,242,0) 60%),
+      #eef6f4;
+  }
+
+  .card{
+    width:100%;max-width:500px;background:rgba(255,255,255,.86);
+    backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+    border:1px solid rgba(255,255,255,.7);
+    border-radius:28px;
+    box-shadow:0 24px 60px -20px rgba(11,125,114,.28), 0 8px 24px -12px rgba(11,125,114,.14);
+    padding:32px 28px 26px;position:relative;overflow:hidden;
+    animation:rise .6s cubic-bezier(.2,.8,.25,1) both;
+  }
+  @keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+  .glow{position:absolute;width:220px;height:220px;border-radius:50%;filter:blur(60px);opacity:.5;pointer-events:none}
+  .glow.a{background:#5fe0c4;top:-90px;right:-70px}
+  .glow.b{background:#7cc9f0;bottom:-100px;left:-80px;opacity:.4}
+
+  .head{display:flex;align-items:center;gap:13px;margin-bottom:20px;position:relative}
+  .logo{
+    width:54px;height:54px;border-radius:17px;flex:none;
+    background:linear-gradient(140deg,var(--brand),var(--brand-3));
+    display:flex;align-items:center;justify-content:center;color:#fff;
+    box-shadow:0 10px 22px -6px rgba(11,125,114,.55);
+  }
+  .logo svg{width:28px;height:28px;stroke:#fff;stroke-width:2.4;fill:none;stroke-linecap:round;stroke-linejoin:round}
+  .brandname{font-weight:800;font-size:17px;letter-spacing:-.2px;line-height:1.1}
+  .brandname span{display:block;font-weight:500;font-size:12px;color:var(--muted);letter-spacing:.3px;margin-top:2px}
+
+  h1{font-size:22px;line-height:1.32;margin:0 0 6px;letter-spacing:-.4px;font-weight:700}
+  .sub{color:var(--muted);font-size:14px;margin:0 0 26px;line-height:1.55}
+
+  .block{margin-bottom:26px}
+  .q{font-size:15.5px;font-weight:600;margin:0 0 14px;display:flex;gap:9px;align-items:flex-start}
+  .qnum{flex:none;width:23px;height:23px;border-radius:8px;background:var(--field);color:var(--brand-2);
+    font-size:12.5px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:1px}
+  .q small{display:block;font-weight:400;color:var(--muted);margin-top:4px;font-size:12.5px;line-height:1.4}
+
+  .faces{display:flex;justify-content:space-between;padding:0 3px;margin-bottom:9px}
+  .face{font-size:19px;transition:.25s;filter:grayscale(.7);opacity:.55;transform:scale(.9)}
+  .face.on{filter:none;opacity:1;transform:scale(1.35)}
+
+  .scale{display:grid;grid-template-columns:repeat(11,1fr);gap:5px}
+  .scale button{
+    aspect-ratio:1;border:1.5px solid var(--line);background:#fff;
+    border-radius:12px;font-size:14px;font-weight:700;color:var(--muted);
+    cursor:pointer;transition:transform .16s cubic-bezier(.2,1.4,.4,1),background .16s,color .16s,border-color .16s,box-shadow .16s;padding:0;
+  }
+  .scale button:hover{border-color:var(--brand);color:var(--brand-2);transform:translateY(-2px)}
+  .scale button.sel{color:#fff;border-color:transparent;transform:translateY(-3px) scale(1.06)}
+  .scale button.sel.det{background:var(--det);box-shadow:0 8px 16px -5px rgba(239,91,69,.6)}
+  .scale button.sel.pas{background:var(--pas);box-shadow:0 8px 16px -5px rgba(245,166,35,.6)}
+  .scale button.sel.pro{background:var(--pro);box-shadow:0 8px 16px -5px rgba(22,185,138,.6)}
+  .scalelabels{display:flex;justify-content:space-between;color:var(--muted);font-size:11.5px;margin-top:10px;font-weight:500}
+
+  .chips{display:flex;flex-wrap:wrap;gap:9px}
+  .chips label{
+    padding:9px 15px;border:1.5px solid var(--line);border-radius:999px;
+    font-size:13px;font-weight:500;cursor:pointer;user-select:none;color:var(--muted);
+    transition:.16s;background:#fff;display:inline-flex;align-items:center;gap:6px;
+  }
+  .chips label:hover{border-color:#bfe3dc}
+  .chips label:has(input:checked){background:linear-gradient(135deg,var(--brand),var(--brand-2));border-color:transparent;color:#fff;box-shadow:0 6px 14px -5px rgba(11,125,114,.55)}
+  .chips input{display:none}
+  .chips label::before{content:"+";font-weight:700;font-size:14px;opacity:.6;transition:.16s}
+  .chips label:has(input:checked)::before{content:"✓";opacity:1}
+
+  textarea,input[type=text]{
+    width:100%;border:1.5px solid var(--line);border-radius:14px;
+    padding:13px 15px;font-size:14.5px;font-family:inherit;resize:vertical;
+    background:var(--field);transition:.16s;color:var(--ink);
+  }
+  textarea::placeholder,input::placeholder{color:#9db6b2}
+  textarea:focus,input:focus{outline:none;border-color:var(--brand);background:#fff;box-shadow:0 0 0 4px rgba(14,163,148,.12)}
+  textarea{min-height:82px;line-height:1.5}
+
+  .submit{
+    width:100%;padding:16px;border:none;border-radius:16px;
+    background:linear-gradient(135deg,var(--brand),var(--brand-3));
+    color:#fff;font-size:16px;font-weight:700;font-family:inherit;cursor:pointer;
+    transition:transform .16s,box-shadow .16s,opacity .16s;
+    box-shadow:0 14px 26px -10px rgba(11,125,114,.65);
+    display:flex;align-items:center;justify-content:center;gap:9px;
+  }
+  .submit svg{width:19px;height:19px;stroke:#fff;stroke-width:2.4;fill:none;stroke-linecap:round;stroke-linejoin:round}
+  .submit:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 18px 32px -10px rgba(11,125,114,.7)}
+  .submit:active:not(:disabled){transform:translateY(0) scale(.99)}
+  .submit:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
+  .foot{text-align:center;color:var(--muted);font-size:12px;margin-top:16px;display:flex;align-items:center;justify-content:center;gap:6px}
+  .foot svg{width:13px;height:13px;stroke:var(--muted);stroke-width:2;fill:none}
+
+  /* Thank you */
+  .thanks{text-align:center;padding:26px 8px 12px;animation:rise .5s ease both}
+  .burst{position:relative;width:96px;height:96px;margin:0 auto 22px}
+  .check{
+    width:96px;height:96px;border-radius:50%;
+    background:linear-gradient(140deg,var(--pro),var(--brand));
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 16px 34px -10px rgba(22,185,138,.6);
+    animation:pop .55s cubic-bezier(.2,1.5,.4,1);
+  }
+  .check svg{width:46px;height:46px;stroke:#fff;stroke-width:3.6;fill:none;stroke-linecap:round;stroke-linejoin:round;
+    stroke-dasharray:40;stroke-dashoffset:40;animation:draw .5s .25s forwards ease}
+  @keyframes pop{0%{transform:scale(0) rotate(-30deg)}100%{transform:scale(1) rotate(0)}}
+  @keyframes draw{to{stroke-dashoffset:0}}
+  .spark{position:absolute;width:8px;height:8px;border-radius:2px;opacity:0}
+  .thanks h2{margin:0 0 10px;font-size:24px;letter-spacing:-.4px;font-weight:800}
+  .thanks p{color:var(--muted);font-size:15px;line-height:1.65;margin:0 auto;max-width:340px}
+  .stars{display:flex;justify-content:center;gap:5px;margin-top:20px}
+  .stars svg{width:22px;height:22px;fill:var(--pas);opacity:0;animation:starp .4s forwards ease}
+  @keyframes starp{from{opacity:0;transform:scale(.4)}to{opacity:1;transform:scale(1)}}
+  .hidden{display:none}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="glow a"></div>
+  <div class="glow b"></div>
+
+  <!-- ====== FORM ====== -->
+  <div id="form">
+    <div class="head">
+      <div class="logo">
+        <svg viewBox="0 0 24 24"><path d="M3 12h3l2-5 4 10 2.5-6 1.5 2h5"/></svg>
+      </div>
+      <div class="brandname">Klinik Gayatri<span>Survei Kepuasan Pasien</span></div>
+    </div>
+
+    <h1>Bagaimana pengalaman Anda hari ini?</h1>
+    <p class="sub">Masukan Anda hanya butuh 30 detik dan sangat berarti bagi kami untuk terus memberi pelayanan terbaik. Terima kasih 🙏</p>
+
+    <div class="block">
+      <p class="q"><span class="qnum">1</span><span>Seberapa besar kemungkinan Anda merekomendasikan Klinik Gayatri kepada keluarga atau teman?<small>Geser dari 0 (tidak mungkin) hingga 10 (sangat mungkin)</small></span></p>
+      <div class="faces" id="faces">
+        <span class="face">😞</span><span class="face">😐</span><span class="face">🙂</span><span class="face">😊</span><span class="face">🤩</span>
+      </div>
+      <div class="scale" id="scale"></div>
+      <div class="scalelabels"><span>Tidak mungkin</span><span>Sangat mungkin</span></div>
+    </div>
+
+    <div class="block">
+      <p class="q"><span class="qnum">2</span><span>Apa yang paling memengaruhi penilaian Anda?</span></p>
+      <div class="chips" id="chips">
+        <label><input type="checkbox" value="Keramahan staf">Keramahan staf</label>
+        <label><input type="checkbox" value="Kualitas dokter">Kualitas dokter</label>
+        <label><input type="checkbox" value="Waktu tunggu">Waktu tunggu</label>
+        <label><input type="checkbox" value="Kebersihan klinik">Kebersihan klinik</label>
+        <label><input type="checkbox" value="Kemudahan janji temu">Kemudahan janji temu</label>
+        <label><input type="checkbox" value="Harga">Harga</label>
+      </div>
+    </div>
+
+    <div class="block">
+      <p class="q"><span class="qnum">3</span><span>Layanan mana yang menarik untuk Anda coba berikutnya? <small>Boleh pilih lebih dari satu</small></span></p>
+      <div class="chips" id="interest">
+        <label><input type="checkbox" value="Poli kulit">Poli kulit</label>
+        <label><input type="checkbox" value="Perawatan wajah">Perawatan wajah</label>
+        <label><input type="checkbox" value="Perawatan Miss V">Perawatan Miss V</label>
+        <label><input type="checkbox" value="Manajemen nyeri">Manajemen nyeri</label>
+        <label><input type="checkbox" value="Poli gizi">Poli gizi</label>
+      </div>
+    </div>
+
+    <div class="block">
+      <p class="q"><span class="qnum">4</span><span>Ada saran atau cerita yang ingin dibagikan? <small>Opsional</small></span></p>
+      <textarea id="comment" placeholder="Tulis di sini..."></textarea>
+    </div>
+
+    <div class="block">
+      <p class="q"><span class="qnum">5</span><span>Nomor WhatsApp <small>Opsional — agar kami bisa menindaklanjuti bila perlu</small></span></p>
+      <input type="text" id="contact" placeholder="08xx xxxx xxxx" inputmode="tel">
+    </div>
+
+    <button class="submit" id="submit" disabled>
+      <span>Kirim Masukan</span>
+      <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </button>
+    <p class="foot"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg> Jawaban Anda aman &amp; hanya untuk peningkatan layanan</p>
+  </div>
+
+  <!-- ====== THANK YOU ====== -->
+  <div id="thanks" class="thanks hidden">
+    <div class="burst">
+      <div class="check"><svg viewBox="0 0 24 24"><polyline points="4 12 10 18 20 6"/></svg></div>
+    </div>
+    <h2>Terima kasih! 💚</h2>
+    <p id="thanksMsg">Masukan Anda sudah kami terima. Sampai jumpa di kunjungan berikutnya di Klinik Gayatri.</p>
+    <div class="stars" id="stars"></div>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   KONFIGURASI GOOGLE FORM  →  isi bagian ini (lihat PANDUAN-SETUP.md)
+   ============================================================ */
+const CONFIG = {
+  FORM_ID: "1FAIpQLScICB8a7dTccFFDyEe6DzEKp2-iJ1A3b2OlBtGs-PEQcqbw1Q",
+  ENTRY: {
+    score:    "entry.698111127",   // Pertanyaan 1 (skor 0-10)
+    reasons:  "entry.357058094",   // Pertanyaan 2 (alasan)
+    interest: "entry.1103507774",  // Pertanyaan 3 (minat layanan)
+    comment:  "entry.1630304841",  // Pertanyaan 4 (saran)
+    contact:  "entry.1896745138"   // Pertanyaan 5 (WhatsApp)
+  }
+};
+/* ============================================================ */
+
+let score = null;
+const scaleEl = document.getElementById('scale');
+const faceEls = document.querySelectorAll('#faces .face');
+
+for (let i = 0; i <= 10; i++){
+  const b = document.createElement('button');
+  b.textContent = i;
+  b.onclick = () => {
+    score = i;
+    [...scaleEl.children].forEach(c => c.className = '');
+    b.classList.add('sel', i <= 6 ? 'det' : i <= 8 ? 'pas' : 'pro');
+    faceEls.forEach((f,idx) => f.classList.toggle('on', idx === Math.min(4, Math.floor(i/2.2))));
+    document.getElementById('submit').disabled = false;
+  };
+  scaleEl.appendChild(b);
+}
+
+document.getElementById('submit').onclick = () => {
+  if (score === null) return;
+  const reasons = [...document.querySelectorAll('#chips input:checked')].map(c => c.value).join(', ');
+  const interest = [...document.querySelectorAll('#interest input:checked')].map(c => c.value).join(', ');
+  const comment = document.getElementById('comment').value.trim();
+  const contact = document.getElementById('contact').value.trim();
+
+  const msg = document.getElementById('thanksMsg');
+  if (score <= 6){
+    msg.textContent = "Terima kasih atas kejujuran Anda. Kami mohon maaf bila pengalaman Anda belum memuaskan — masukan ini kami tindaklanjuti dengan serius.";
+  } else if (score <= 8){
+    msg.textContent = "Terima kasih atas masukannya! Kami terus berupaya agar kunjungan Anda berikutnya lebih baik lagi.";
+  }
+
+  sendToGoogleForm({ score, reasons, interest, comment, contact });
+
+  document.getElementById('form').classList.add('hidden');
+  document.getElementById('thanks').classList.remove('hidden');
+
+  // animate stars
+  const stars = document.getElementById('stars');
+  for (let i=0;i<5;i++){
+    const s = document.createElementNS('http://www.w3.org/2000/svg','svg');
+    s.setAttribute('viewBox','0 0 24 24');
+    s.innerHTML = '<path d="M12 2l2.9 6.3 6.9.7-5.1 4.6 1.4 6.8L12 17.8 5.9 20.4l1.4-6.8L2.2 9l6.9-.7z"/>';
+    s.style.animationDelay = (0.15 + i*0.09) + 's';
+    stars.appendChild(s);
+  }
+};
+
+function sendToGoogleForm(data){
+  if (CONFIG.FORM_ID.startsWith("GANTI")) {
+    console.warn("Google Form belum dikonfigurasi. Data:", data);
+    return;
+  }
+  const url = `https://docs.google.com/forms/d/e/${CONFIG.FORM_ID}/formResponse`;
+  const params = new URLSearchParams();
+  params.append(CONFIG.ENTRY.score, data.score);
+  params.append(CONFIG.ENTRY.reasons, data.reasons);
+  params.append(CONFIG.ENTRY.interest, data.interest);
+  params.append(CONFIG.ENTRY.comment, data.comment);
+  params.append(CONFIG.ENTRY.contact, data.contact);
+  fetch(url, { method:"POST", mode:"no-cors", body: params });
+}
+</script>
+</body>
+</html>

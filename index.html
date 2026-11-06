@@ -195,12 +195,22 @@
     </div>
 
     <div class="block">
-      <p class="q"><span class="qnum">4</span><span>Ada saran atau cerita yang ingin dibagikan? <small>Opsional</small></span></p>
+      <p class="q"><span class="qnum">4</span><span>Menurut Anda, bagaimana pembiayaan (harga) di Klinik Gayatri? <small>Pilih salah satu</small></span></p>
+      <div class="chips" id="pricing">
+        <label><input type="radio" name="pricing" value="Terjangkau">Terjangkau</label>
+        <label><input type="radio" name="pricing" value="Murah">Murah</label>
+        <label><input type="radio" name="pricing" value="Mahal">Mahal</label>
+        <label><input type="radio" name="pricing" value="Terlalu mahal">Terlalu mahal</label>
+      </div>
+    </div>
+
+    <div class="block">
+      <p class="q"><span class="qnum">5</span><span>Ada saran atau cerita yang ingin dibagikan? <small>Opsional</small></span></p>
       <textarea id="comment" placeholder="Tulis di sini..."></textarea>
     </div>
 
     <div class="block">
-      <p class="q"><span class="qnum">5</span><span>Nomor WhatsApp <small>Opsional — agar kami bisa menindaklanjuti bila perlu</small></span></p>
+      <p class="q"><span class="qnum">6</span><span>Nomor WhatsApp <small>Opsional — agar kami bisa menindaklanjuti bila perlu</small></span></p>
       <input type="text" id="contact" placeholder="08xx xxxx xxxx" inputmode="tel">
     </div>
 
@@ -237,8 +247,9 @@ const CONFIG = {
     score:    "entry.698111127",   // Pertanyaan 1 (skor 0-10)
     reasons:  "entry.357058094",   // Pertanyaan 2 (alasan)
     interest: "entry.1103507774",  // Pertanyaan 3 (minat layanan)
-    comment:  "entry.1630304841",  // Pertanyaan 4 (saran)
-    contact:  "entry.1896745138"   // Pertanyaan 5 (WhatsApp)
+    pricing:  "entry.298874868",  // Pertanyaan 4 (pembiayaan/harga)
+    comment:  "entry.1630304841",  // Pertanyaan 5 (saran)
+    contact:  "entry.1896745138"   // Pertanyaan 6 (WhatsApp)
   }
 };
 /* ============================================================ */
@@ -291,6 +302,7 @@ submitBtn.onclick = () => {
   hintEl.style.display = 'none';
   const reasons = [...document.querySelectorAll('#chips input:checked')].map(c => c.value);
   const interest = [...document.querySelectorAll('#interest input:checked')].map(c => c.value);
+  const pricing = (document.querySelector('#pricing input:checked') || {}).value || '';
   const comment = document.getElementById('comment').value.trim();
   const contact = contactEl.value.trim();
 
@@ -304,7 +316,7 @@ submitBtn.onclick = () => {
   }
 
   try {
-    sendToGoogleForm({ score, reasons, interest, comment, contact });
+    sendToGoogleForm({ score, reasons, interest, pricing, comment, contact });
   } catch (err) {
     console.error('Gagal mengirim ke Google Form:', err);
   }
@@ -328,7 +340,7 @@ submitBtn.onclick = () => {
 document.getElementById('backbtn').onclick = () => {
   score = null;
   [...emoscale.children].forEach(el => el.classList.remove('on'));
-  document.querySelectorAll('#chips input:checked, #interest input:checked').forEach(c => c.checked = false);
+  document.querySelectorAll('#chips input:checked, #interest input:checked, #pricing input:checked').forEach(c => c.checked = false);
   document.getElementById('comment').value = '';
   contactEl.value = '';
   hintEl.style.display = 'none';
@@ -375,6 +387,8 @@ function sendToGoogleForm(data){
     .forEach(v => add(CONFIG.ENTRY.reasons, v));
   (Array.isArray(data.interest) ? data.interest : (data.interest ? [data.interest] : []))
     .forEach(v => add(CONFIG.ENTRY.interest, v));
+  // Pertanyaan 4 (harga): hanya dikirim bila entry ID sudah diisi (bukan placeholder "GANTI")
+  if (CONFIG.ENTRY.pricing && !CONFIG.ENTRY.pricing.includes('GANTI')) add(CONFIG.ENTRY.pricing, data.pricing);
   add(CONFIG.ENTRY.comment, data.comment);
   add(CONFIG.ENTRY.contact, data.contact);
 
